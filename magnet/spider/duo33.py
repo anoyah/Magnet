@@ -1,5 +1,5 @@
-from internal.frame.spider import MagnetSpider
-from internal.data.item import MagnetItem
+from .internal.frame.spider import MagnetSpider
+from .internal.data.item import MagnetItem
 
 
 class Duo33(MagnetSpider):
@@ -26,10 +26,11 @@ class Duo33(MagnetSpider):
             'zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6',
         }
 
-    def spider(self):
-        params = (('word', 'fc2ppv'), )
+    def spider(self, words="中国"):
+        params = (('word', f'{words}'), )
         resp = self.get_resp(self.url, req_type="get", data=params)
         tbox = resp.xpath("//div[@class='tbox']//div[@class='ssbox']")
+        result = []
         for t in tbox:
             title = "".join(t.xpath(".//h3/a/em/text() | .//h3/a/text()"))
             magnet = "".join(t.xpath(".//div[@class='sbar']/span[1]/a/@href"))
@@ -42,14 +43,20 @@ class Duo33(MagnetSpider):
                 t.xpath(".//div[@class='sbar']/span[5]/b/text()"))
             if magnet == "":
                 continue
-            MagnetItem(
-                title=title,
-                magnet=magnet,
+            item = MagnetItem(
+                hot=file_hot,
+                count=file_count,
+                size=file_size,
                 time=time,
+                magnet=magnet,
+                title=title,
             )
-            # self.logger.info(
-            #     f"{title}\n{magnet}\n{time}\n{file_size}\n{file_count}\n{file_hot}"
-            # )
+
+            result.append(item.json())
+        return result
+        # self.logger.info(
+        #     f"{title}\n{magnet}\n{time}\n{file_size}\n{file_count}\n{file_hot}"
+        # )
 
 
 if __name__ == "__main__":

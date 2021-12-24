@@ -1,12 +1,13 @@
 import httpx
 
-from internal.frame.request import Response
-from internal.logger.log import color_log
+from .request import Response
+# from ..logger.log import color_log
+import logging
 """
     磁链爬虫基类
 """
 
-logger = color_log()
+logger = logging.getLogger(__name__)
 
 
 class MagnetSpider:
@@ -50,4 +51,7 @@ class MagnetSpider:
         raise NotImplementedError
 
     def main(self):
-        self.spider()
+        return self.spider()
+
+    def search(self,words):
+        return self.spider(words)
