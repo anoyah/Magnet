@@ -1,15 +1,15 @@
 import typing
-from httpx import Response
+import httpx
 from lxml import etree
 
 
-class Res:
-    def __init__(self, resp: Response) -> None:
+class Response:
+    def __init__(self, resp: httpx.Response) -> None:
         self._resp = resp
-        if isinstance(self._resp, Response):
+        if isinstance(self._resp, httpx.Response):
             self._dom = etree.HTML(self.text)
         else:
-            raise TypeError
+            raise TypeError(f"resp must be Response.")
 
     def json(self) -> typing.Any:
         return self._resp.json()
@@ -26,4 +26,4 @@ class Res:
         if isinstance(xpath, str):
             return self._dom.xpath(xpath)
         else:
-            raise TypeError
+            raise TypeError(f"xpath must be Response.")

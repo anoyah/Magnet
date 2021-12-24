@@ -1,9 +1,11 @@
-from base.spider import MagnetSpider
+from internal.frame.spider import MagnetSpider
+from internal.data.item import MagnetItem
 
 
 class Duo33(MagnetSpider):
-    def __init__(self, url=None) -> None:
-        super().__init__(url)
+    def __init__(self) -> None:
+        self.url = "https://duo1.dns33.top:39988/search"
+        super().__init__(self.url)
         self.headers = {
             'authority': 'duo1.dns33.top:39988',
             'sec-ch-ua':
@@ -25,7 +27,7 @@ class Duo33(MagnetSpider):
         }
 
     def spider(self):
-        params = (('word', '91'), )
+        params = (('word', 'fc2ppv'), )
         resp = self.get_resp(self.url, req_type="get", data=params)
         tbox = resp.xpath("//div[@class='tbox']//div[@class='ssbox']")
         for t in tbox:
@@ -38,11 +40,18 @@ class Duo33(MagnetSpider):
                 t.xpath(".//div[@class='sbar']/span[4]/b/text()"))
             file_hot = "".join(
                 t.xpath(".//div[@class='sbar']/span[5]/b/text()"))
-            print(
-                f"{title}\n{magnet}\n{time}\n{file_size}\n{file_count}\n{file_hot}"
+            if magnet == "":
+                continue
+            MagnetItem(
+                title=title,
+                magnet=magnet,
+                time=time,
             )
+            # self.logger.info(
+            #     f"{title}\n{magnet}\n{time}\n{file_size}\n{file_count}\n{file_hot}"
+            # )
 
 
 if __name__ == "__main__":
-    duo = Duo33("https://duo1.dns33.top:39988/search")
+    duo = Duo33()
     duo.main()
