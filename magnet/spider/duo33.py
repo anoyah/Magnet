@@ -1,5 +1,5 @@
-from .internal.frame.spider import MagnetSpider
-from .internal.data.item import MagnetItem
+from magnet.spider.internal.frame.spider import MagnetSpider
+from magnet.spider.internal.data.item import MagnetItem
 
 
 class Duo33(MagnetSpider):

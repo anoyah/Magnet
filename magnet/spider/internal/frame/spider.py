@@ -1,7 +1,6 @@
 import httpx
 
-from .request import Response
-# from ..logger.log import color_log
+from magnet.spider.internal.frame.request import Response
 import logging
 """
     磁链爬虫基类
@@ -53,5 +52,5 @@ class MagnetSpider:
     def main(self):
         return self.spider()
 
-    def search(self,words):
+    def search(self, words):
         return self.spider(words)
