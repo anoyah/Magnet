@@ -16,4 +16,4 @@ python manage.py runserver
 
 
 ### 磁链地址
-    1、https://duo33.cloud/
+    1、https://duo33.world/

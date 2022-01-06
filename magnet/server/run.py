@@ -8,6 +8,25 @@ app = Flask(__name__)
 logger = logging.getLogger(__name__)
 
 
+def _response(data):
+    return {"code": 200, "msg": data, "status": "success"}
+
+
+# 统一响应格式
+def _suc(words: str, length: int, page: int, data: dict, source: int):
+    return _response({
+        "source": source,
+        "words": words,
+        "lenght": length,
+        "data": data,
+        "page": page,
+    })
+
+
+def _err(msg: str = "Request exception!"):
+    return _response(msg)
+
+
 @app.route("/")
 def index():
     r = Duo33().main()
@@ -16,16 +35,18 @@ def index():
 
 @app.route("/search")
 def search():
-    # if request.method == "get":
-    words = request.args.get("words", None)
-    if words is None:
-        words = "中国纪录片"
-    r = Duo33().search(words)
-    return jsonify({
-        "words": words,
-        "lenght": len(r),
-        "data": r,
-    })
+    if request.method == "GET":
+        words = request.args.get("words", None)
+        page = request.args.get("page", 1)
+        source = request.args.get("source", 1)
+        # 默认获取资源
+        if words is None:
+            words = "中国纪录片"
+        if int(source) == 1:
+            r = Duo33().search(words, page)
+        return _suc(words, len(r), page, r, source)
+    else:
+        return _err("request error")
 
 
 def run(port: int):

@@ -52,5 +52,5 @@ class MagnetSpider:
     def main(self):
         return self.spider()
 
-    def search(self, words):
-        return self.spider(words)
+    def search(self, words, page):
+        return self.spider(words, page)
