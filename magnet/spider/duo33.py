@@ -26,8 +26,12 @@ class Duo33(MagnetSpider):
             'zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6',
         }
 
-    def spider(self, words="中国"):
-        params = (('word', f'{words}'), )
+    def spider(self, words="中国", page=1):
+        # 请求参数
+        params = (
+            ('word', f'{words}'),
+            ("page", page),
+        )
         resp = self.get_resp(self.url, req_type="get", data=params)
         tbox = resp.xpath("//div[@class='tbox']//div[@class='ssbox']")
         result = []
@@ -54,9 +58,6 @@ class Duo33(MagnetSpider):
 
             result.append(item.json())
         return result
-        # self.logger.info(
-        #     f"{title}\n{magnet}\n{time}\n{file_size}\n{file_count}\n{file_hot}"
-        # )
 
 
 if __name__ == "__main__":
